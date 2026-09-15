@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FIZXDEPLOY — Deploy Smarter, Not Harder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ================= BACKGROUND FX ================= -->
+  <div class="bg-layer">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <!-- ================= LOGIN SCREEN ================= -->
+  <section id="loginScreen" class="screen login-screen">
+    <div class="login-card">
+      <div class="brand-mark">F</div>
+      <h1 class="logo">FIZX<span>DEPLOY</span></h1>
+      <p class="tagline">Deploy Smarter, Not Harder</p>
+
+      <form id="loginForm" class="form" autocomplete="off">
+        <div class="field">
+          <label for="loginToken">Vercel Token</label>
+          <div class="input-wrap">
+            <input id="loginToken" type="password" placeholder="vercel_xxxxxxxxxxxx" required />
+            <button type="button" class="eye-btn" data-toggle="loginToken" aria-label="Show token">👁</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="loginProject">Project Name</label>
+          <input id="loginProject" type="text" placeholder="my-awesome-app" required />
+        </div>
+
+        <div class="field">
+          <label for="loginFramework">Framework</label>
+          <select id="loginFramework">
+            <option>Next.js</option>
+            <option>React</option>
+            <option>Vue</option>
+            <option>Svelte</option>
+            <option>Static</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Connect &amp; Deploy</button>
+        <a href="#" class="help-link" id="helpLink">How to get a Vercel Token?</a>
+      </form>
+    </div>
+    <p class="footer-note">© 2026 FIZXDEPLOY — All systems operational</p>
+  </section>
+
+  <!-- ================= DASHBOARD ================= -->
+  <section id="dashboardScreen" class="screen dashboard-screen hidden">
+
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-head">
+        <div class="brand-mark small">F</div>
+        <span class="sidebar-title">FIZXDEPLOY</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active"><span class="ico">🏠</span> Dashboard</a>
+        <a href="#" class="nav-item" data-open-deploy><span class="ico">🚀</span> Deploy New</a>
+        <a href="#" class="nav-item"><span class="ico">📦</span> Projects</a>
+        <a href="#" class="nav-item"><span class="ico">🔑</span> Tokens</a>
+        <a href="#" class="nav-item"><span class="ico">📊</span> Analytics</a>
+        <a href="#" class="nav-item"><span class="ico">⚙️</span> Settings</a>
+        <a href="#" class="nav-item danger" id="logoutBtn"><span class="ico">🚪</span> Logout</a>
+      </nav>
+    </aside>
+
+    <header class="topbar">
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="topbar-brand"><span class="logo-mini">FIZX<span>DEPLOY</span></span></div>
+      <div class="topbar-right">
+        <button class="icon-btn" id="bellBtn" aria-label="Notifications">🔔<span class="dot"></span></button>
+        <div class="avatar">F</div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">🚀</div>
+          <div class="stat-value" data-count="128">0</div>
+          <div class="stat-label">Total Deployments</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📦</div>
+          <div class="stat-value" data-count="12">0</div>
+          <div class="stat-label">Active Projects</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">✅</div>
+          <div class="stat-value" data-count="98" data-suffix="%">0</div>
+          <div class="stat-label">Success Rate</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🔑</div>
+          <div class="stat-value" data-count="3">0</div>
+          <div class="stat-label">Tokens Used</div>
+        </div>
+      </div>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Recent Deployments</h2>
+          <button class="btn btn-primary btn-sm" data-open-deploy>+ Deploy New</button>
+        </div>
+        <div class="deploy-list" id="deployList"></div>
+      </section>
+    </main>
+  </section>
+
+  <!-- ================= DEPLOY MODAL ================= -->
+  <div class="modal-backdrop hidden" id="deployModal">
+    <div class="modal">
+      <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+
+      <!-- STAGE 1: FORM -->
+      <div id="deployFormStage">
+        <h3 class="modal-title">🚀 Deploy New Project</h3>
+        <p class="modal-sub">Choose your source, then ship it in seconds.</p>
+
+        <form id="deployForm" class="form">
+          <div class="field">
+            <label for="mToken">Vercel Token</label>
+            <div class="input-wrap">
+              <input id="mToken" type="password" placeholder="vercel_xxxxxxxxxxxx" required />
+              <button type="button" class="eye-btn" data-toggle="mToken" aria-label="Show token">👁</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="mProject">Project Name</label>
+            <input id="mProject" type="text" placeholder="my-awesome-app" required />
+          </div>
+
+          <div class="field">
+            <label for="mFramework">Framework</label>
+            <select id="mFramework">
+              <option>Next.js</option>
+              <option>React</option>
+              <option>Vue</option>
+              <option>Svelte</option>
+              <option>Static</option>
+            </select>
+          </div>
+
+          <!-- SOURCE TABS -->
+          <div class="field">
+            <label>Deployment Source</label>
+            <div class="source-tabs" id="sourceTabs">
+              <button type="button" class="source-tab active" data-source="files">
+                <span class="tab-ico">📁</span>
+                <span class="tab-label">Files</span>
+              </button>
+              <button type="button" class="source-tab" data-source="zip">
+                <span class="tab-ico">🗜️</span>
+                <span class="tab-label">ZIP</span>
+              </button>
+              <button type="button" class="source-tab" data-source="link">
+                <span class="tab-ico">🔗</span>
+                <span class="tab-label">Link</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- SOURCE PANEL: FILES -->
+          <div class="source-panel active" data-panel="files">
+            <label class="dropzone" id="dropzoneFiles">
+              <input type="file" id="inputFiles" multiple hidden />
+              <div class="dropzone-inner">
+                <div class="dropzone-ico">📁</div>
+                <div class="dropzone-title">Drop files or folder here</div>
+                <div class="dropzone-sub">or <span>click to browse</span> — multiple files supported</div>
+              </div>
+            </label>
+            <div class="file-list" id="fileListFiles"></div>
+          </div>
+
+          <!-- SOURCE PANEL: ZIP -->
+          <div class="source-panel" data-panel="zip">
+            <label class="dropzone" id="dropzoneZip">
+              <input type="file" id="inputZip" accept=".zip" hidden />
+              <div class="dropzone-inner">
+                <div class="dropzone-ico">🗜️</div>
+                <div class="dropzone-title">Drop your .zip file here</div>
+                <div class="dropzone-sub">or <span>click to browse</span> — max 100MB</div>
+              </div>
+            </label>
+            <div class="file-list" id="fileListZip"></div>
+          </div>
+
+          <!-- SOURCE PANEL: LINK -->
+          <div class="source-panel" data-panel="link">
+            <div class="field">
+              <label for="mLink">Repository / Source URL</label>
+              <input id="mLink" type="url" placeholder="https://github.com/user/repo" />
+            </div>
+            <div class="link-preview" id="linkPreview">
+              <span class="link-preview-dot"></span>
+              Paste a GitHub, GitLab, or any public repo URL
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="btn btn-ghost" id="cancelDeploy">Cancel</button>
+            <button type="submit" class="btn btn-primary">Deploy Now</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- STAGE 2: PROGRESS -->
+      <div id="deployProgressStage" class="hidden">
+        <h3 class="modal-title">Deploying to Edge…</h3>
+        <p class="modal-sub" id="progressSub">Please wait while we ship your project.</p>
+
+        <div class="progress-wrap">
+          <svg class="ring" viewBox="0 0 120 120">
+            <circle class="ring-bg" cx="60" cy="60" r="52" />
+            <circle class="ring-fg" id="ringFg" cx="60" cy="60" r="52" />
+          </svg>
+          <div class="ring-label"><span id="ringPct">0</span>%</div>
+        </div>
+
+        <!-- Step timeline -->
+        <ol class="timeline" id="timeline">
+          <li data-step="0">
+            <span class="tl-dot"></span>
+            <div class="tl-body">
+              <div class="tl-title">Validating token &amp; config</div>
+              <div class="tl-desc">Checking credentials against Vercel API</div>
+            </div>
+          </li>
+          <li data-step="1">
+            <span class="tl-dot"></span>
+            <div class="tl-body">
+              <div class="tl-title">Uploading source</div>
+              <div class="tl-desc">Transferring files to build container</div>
+            </div>
+          </li>
+          <li data-step="2">
+            <span class="tl-dot"></span>
+            <div class="tl-body">
+              <div class="tl-title">Building project</div>
+              <div class="tl-desc">Installing deps and compiling bundle</div>
+            </div>
+          </li>
+          <li data-step="3">
+            <span class="tl-dot"></span>
+            <div class="tl-body">
+              <div class="tl-title">Deploying to edge network</div>
+              <div class="tl-desc">Pushing build to global CDN</div>
+            </div>
+          </li>
+          <li data-step="4">
+            <span class="tl-dot"></span>
+            <div class="tl-body">
+              <div class="tl-title">Finalizing</div>
+              <div class="tl-desc">Assigning domain &amp; SSL certificate</div>
+            </div>
+          </li>
+        </ol>
+
+        <!-- Terminal log -->
+        <div class="terminal" id="terminal">
+          <div class="terminal-head">
+            <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+            <span class="terminal-title">fizx-deploy — build log</span>
+          </div>
+          <div class="terminal-body" id="terminalBody"></div>
+        </div>
+
+        <!-- Result -->
+        <div class="deploy-result hidden" id="deployResult">
+          <div class="check">✓</div>
+          <p>Deployment successful!</p>
+          <div class="url-box">
+            <code id="deployUrl">https://my-app.vercel.app</code>
+            <button class="copy-btn" id="copyUrlBtn" title="Copy URL">📋</button>
+            <a class="open-btn" id="openUrlBtn" href="#" target="_blank" rel="noopener" title="Open in new tab">↗</a>
+          </div>
+          <button class="btn btn-primary btn-block" id="doneBtn">Done</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= TOASTS ================= -->
+  <div class="toast-stack" id="toastStack"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
